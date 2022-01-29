@@ -15,7 +15,7 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
-      -attach_workspace:
+      - attach_workspace:
         at: docs/_build
       - run:
           name: Install and configure dependencies
@@ -26,7 +26,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - 9e:d4:50:c4:f3:c2:83:8b:17:67:48:3e:a0:94:9e:ec
-      -run:
+      - run:
         name: Deploy docs to gh-pages branch
         command: gh-pages --dist docs/_build/html
 
