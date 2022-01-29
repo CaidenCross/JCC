@@ -5,22 +5,38 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
+  docs-deploy:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
-      - image: cimg/base:stable
+      - image: node:16.13.2 
+      #cimg/base:stable
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
+      -attach_workspace:
+        at: docs/_build
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: Install and configure dependencies
+          command: | 
+            npm install -g --silent gh-pages
+            git config user.email "jonathan.peck19@gmail.com"
+            git config user.name "caidencross"
+      - add_ssh_keys:
+          fingerprints:
+            - 9e:d4:50:c4:f3:c2:83:8b:17:67:48:3e:a0:94:9e:ec
+      -run:
+        name: Deploy docs to gh-pages branch
+        command: gh-pages --dist docs/_build/html
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  version: 2.1
+   build: 
     jobs:
-      - say-hello
+      - docs-build
+      - docs-deploy:
+        requires:
+          - docs-build
