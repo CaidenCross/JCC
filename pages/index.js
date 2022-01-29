@@ -1,4 +1,4 @@
-
+import styles from '@styles/styles.scss'
 // Rememebr on any line of code you can // then type and it will show up as a comment so any of us can read it!
 export default function Home() {
     return (
