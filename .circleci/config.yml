@@ -2,6 +2,27 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+executors:
+  node12:
+    working_directory: '~/project'
+    docker:
+      - image: 'node:16.13.2'
+      
+commands:
+  attach_workspace_at_root:
+    steps:
+      - attach_workspace:
+          at: '.'
+
+  persist_to_root_workspace:
+    parameters:
+      paths:
+        type: string
+    steps:
+      - persist_to_workspace:
+          root: '.'
+          paths: [<< parameters.paths >>]
+
 jobs:
   one:
     docker:
